@@ -1,0 +1,260 @@
+将项目推送到 GitHub 的流程总结（Markdown 格式）：
+
+```markdown
+# 将本地项目推送到 GitHub 完整流程
+
+## 前置准备
+
+### 1. 确保已安装 Git
+```bash
+git --version
+```
+
+### 2. 配置 Git 用户信息（如果尚未配置）
+```bash
+git config --global user.name "你的用户名"
+git config --global user.email "你的邮箱"
+```
+
+## 完整操作流程
+
+### 步骤 1：解决 Git 安全目录问题（如遇到）
+
+如果遇到 `fatal: detected dubious ownership` 错误，需要将目录添加到安全目录列表：
+
+```powershell
+git config --global --add safe.directory 'F:/新建文件夹 (5)/新建文件夹/pdf'
+```
+
+### 步骤 2：初始化 Git 仓库（如果尚未初始化）
+
+```powershell
+git init
+```
+
+### 步骤 3：添加文件到暂存区
+
+```powershell
+git add .
+```
+
+**注意**：如果看到 `LF will be replaced by CRLF` 的警告，这是正常的，Git 会自动处理 Windows 和 Unix 系统的换行符差异。
+
+### 步骤 4：提交更改
+
+```powershell
+git commit -m "初始提交：项目描述"
+```
+
+### 步骤 5：在 GitHub 上创建新仓库
+
+1. 登录 GitHub
+2. 点击右上角的 `+` → `New repository`
+3. 填写仓库名称（例如：`pdf-merge-split`）
+4. 选择 Public 或 Private
+5. **不要勾选** "Initialize this repository with a README"（因为本地已有代码）
+6. 点击 `Create repository`
+
+### 步骤 6：添加远程仓库
+
+```powershell
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+```
+
+**替换变量**：
+- `YOUR_USERNAME`：你的 GitHub 用户名
+- `YOUR_REPO_NAME`：你在 GitHub 上创建的仓库名称
+
+**示例**：
+```powershell
+git remote add origin https://github.com/12434234ad/pdf-merge-split.git
+```
+
+### 步骤 7：验证远程仓库配置
+
+```powershell
+git remote -v
+```
+
+应该显示：
+```
+origin  https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git (fetch)
+origin  https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git (push)
+```
+
+### 步骤 8：推送到 GitHub
+
+**首次推送**（需要设置上游分支）：
+
+```powershell
+# 如果本地分支是 master
+git push -u origin master
+
+# 如果本地分支是 main
+git push -u origin main
+```
+
+**如何确定分支名称**：
+```powershell
+git branch
+```
+
+### 步骤 9：完成身份验证
+
+首次推送时，Git 会提示在浏览器中完成身份验证：
+```
+info: please complete authentication in your browser...
+```
+
+按照提示在浏览器中完成 GitHub 登录和授权即可。
+
+## 常见错误及解决方案
+
+### 错误 1：`fatal: detected dubious ownership`
+
+**原因**：目录所有者与当前用户不匹配
+
+**解决方案**：
+```powershell
+git config --global --add safe.directory '你的项目路径'
+```
+
+### 错误 2：`error: No such remote 'origin'`
+
+**原因**：在添加远程仓库之前就尝试使用它
+
+**解决方案**：先执行 `git remote add origin ...`，再执行其他远程操作
+
+### 错误 3：`error: src refspec main does not match any`
+
+**原因**：本地分支名称与推送的分支名称不匹配
+
+**解决方案**：
+1. 查看本地分支：`git branch`
+2. 使用正确的分支名称推送，例如：`git push -u origin master`
+
+### 错误 4：`warning: LF will be replaced by CRLF`
+
+**说明**：这是正常警告，不是错误。Git 会自动处理换行符转换。
+
+## 后续操作
+
+### 推送新的更改
+
+```powershell
+# 1. 查看更改状态
+git status
+
+# 2. 添加更改的文件
+git add .
+
+# 3. 提交更改
+git commit -m "描述你的更改"
+
+# 4. 推送到 GitHub
+git push
+```
+
+### 查看提交历史
+
+```powershell
+git log
+```
+
+### 查看远程仓库信息
+
+```powershell
+git remote -v
+```
+
+## 最佳实践建议
+
+### 1. 创建 .gitignore 文件
+
+在项目根目录创建 `.gitignore` 文件，避免提交不必要的文件：
+
+```gitignore
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# Flask
+instance/
+.webassets-cache
+
+# 上传的文件
+uploads/*
+!uploads/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.tmp
+*.log
+```
+
+### 2. 编写清晰的提交信息
+
+提交信息应该清晰描述本次更改的内容：
+- ✅ 好的提交信息：`git commit -m "添加PDF合并功能"`
+- ❌ 不好的提交信息：`git commit -m "更新"`
+
+### 3. 定期提交和推送
+
+建议：
+- 完成一个功能后立即提交
+- 每天结束工作前推送一次
+- 避免长时间不提交导致大量更改堆积
+
+## 完整命令序列（快速参考）
+
+```powershell
+# 1. 解决安全目录问题（如需要）
+git config --global --add safe.directory '项目路径'
+
+# 2. 初始化仓库（如需要）
+git init
+
+# 3. 添加文件
+git add .
+
+# 4. 提交
+git commit -m "初始提交"
+
+# 5. 添加远程仓库
+git remote add origin https://github.com/用户名/仓库名.git
+
+# 6. 推送
+git push -u origin master  # 或 main
+```
+
+## 验证推送成功
+
+推送成功后，访问你的 GitHub 仓库地址：
+```
+https://github.com/YOUR_USERNAME/YOUR_REPO_NAME
+```
+
+应该能看到所有文件都已上传。
+
+---
+
+**提示**：如果遇到其他问题，可以查看 Git 的错误信息，通常都会提供解决建议。
+```
+
+可直接复制使用，或保存为 `.md` 文件。

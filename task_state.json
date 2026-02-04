@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "input_path": "C:\\Users\\Administrator\\Desktop\\your.pdf",
+  "file_type": "pdf",
+  "created_at": "2026-02-01T13:51:49.031986+00:00",
+  "updated_at": "2026-02-01T13:53:06.598819+00:00",
+  "output_dir": "E:\\output\\your",
+  "segments": [
+    {
+      "segment_id": "pdf_full_p0001-0022",
+      "start_page": 1,
+      "end_page": 22,
+      "part_path": "C:\\Users\\Administrator\\Desktop\\your.pdf",
+      "done": true,
+      "attempts": 1,
+      "elapsed_s": null,
+      "last_http_status": null,
+      "last_error": null
+    }
+  ],
+  "images_downloaded": [],
+  "merged_md_done": true
+}

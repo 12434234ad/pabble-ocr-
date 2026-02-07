@@ -20,12 +20,20 @@
   
 # 工具使用规范
   - **plan**:主动频繁使用、跨文件修改或多步骤任务拆解时，实时跟踪,
-  - **Sequential Thinking**:解决"要不要做"(需求/架构);需求含≥3个不确定因素、存在多种可行方案需要权衡、涉及复杂的系统分析;进行问题分解、验证结论、列出边界与至少2个方案（**规划前必须执行**）
+  - **Sequential Thinking**:解决"要不要做"(需求/架构);需求含≥3个不确定因素、存在多种可行方案需要权衡、涉及复杂的系统分析;进行问题分解、验证结论、列出边界与至少2个方案
   - **Context 7**:解决"怎么做"(技术选型/新API);需要最新API文档、框架版本特定特性、项目中未使用过的新技术或最佳实践查询时（先 `resolve-library-id` 后 `get-library-docs`）
   - **Playwright**:  UI 自动化或交互验证、（触发场景）：网页截图、表单测试、SPA 交互验证，需要浏览器级联动验证时。安全限制：仅开发测试用途  
   - **deepwiki**: 查询并理解 GitHub 仓库的内部文档结构、内容，并进行基于文档的问答。当 AI 需要查询 / 理解某个 GitHub 仓库的文档结构、内部文档内容，或基于文档进行自然语言问答时触发。
    - **augment-context-engine**（本地代码分析+编辑优先）：触发条件：代码检索、架构分析、跨文件引用、项目理解、代码编辑、重构、文档生成、项目知识管理
    - **firecrawl**（通用后备网络检索）：触发条件：search tools、context7 无法满足、需要最新博客/文章/教程（false）
  
+ ## Planning with Files
+
+<IMPORTANT>
+For complex tasks (3+ steps, research, projects):
+1. Read skill: `cat ~/.codex/skills/planning-with-files/planning-with-files/SKILL.md`
+2. Create task_plan.md, findings.md, progress.md in your project directory
+3. Follow 3-file pattern throughout the task
+</IMPORTANT>
   
 

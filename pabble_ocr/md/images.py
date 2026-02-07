@@ -6,6 +6,7 @@ import os
 import re
 import time
 from pathlib import Path
+from shutil import copy2
 from typing import Optional
 from urllib.parse import urljoin
 
@@ -71,10 +72,35 @@ def download_images(
 
     for rel_path, ref in images.items():
         rel_path = rel_path.replace("\\", "/")
-        if rel_path in downloaded:
-            continue
-
         dst = output_dir / rel_path
+        try:
+            # 以文件存在为准：避免“下载目录策略变更”或手动移动图片后，state 仍标记已下载导致跳过。
+            if dst.exists() and dst.stat().st_size > 0:
+                continue
+        except Exception:
+            pass
+
+        # 若图片已存在于“另一种常见目录布局”（例如从根目录迁移到 `_parts/`），优先复制迁移，避免重复下载。
+        try:
+            cand: Path | None = None
+            rel = rel_path
+            if output_dir.name == "_parts":
+                if rel.startswith("_parts/"):
+                    cand = output_dir.parent / rel[len("_parts/") :]
+                else:
+                    cand = output_dir.parent / rel
+            else:
+                if rel.startswith("_parts/"):
+                    cand = output_dir / rel[len("_parts/") :]
+                else:
+                    cand = output_dir / "_parts" / rel
+            if cand is not None and cand != dst and cand.exists() and cand.stat().st_size > 0:
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                copy2(cand, dst)
+                continue
+        except Exception:
+            pass
+
         dst.parent.mkdir(parents=True, exist_ok=True)
 
         inline = _maybe_decode_inline_image(ref)

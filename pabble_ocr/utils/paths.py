@@ -17,19 +17,16 @@ def resolve_path_maybe_windows(path: str | Path, *, base_dir: Path | None = None
     - Linux/WSL：若传入 Windows 盘符路径，尝试映射到 /mnt/<drive>/<rest>
     - 相对路径：若提供 base_dir，则相对于 base_dir
     """
-    if isinstance(path, Path):
-        p = path
-    else:
-        p = Path(str(path))
+    s = str(path)
+    m = _WIN_ABS_RE.match(s)
+    if m and os.name != "nt":
+        drive = m.group("drive").lower()
+        rest = m.group("rest").replace("\\", "/")
+        return Path("/mnt") / drive / rest
+
+    p = path if isinstance(path, Path) else Path(s)
 
     if p.is_absolute():
-        # 在 Linux 下，Windows 盘符路径通常会被识别为相对路径（例如 'E:\\x'），需手动处理
-        s = str(path)
-        m = _WIN_ABS_RE.match(s)
-        if m and os.name != "nt":
-            drive = m.group("drive").lower()
-            rest = m.group("rest").replace("\\", "/")
-            return Path("/mnt") / drive / rest
         return p
 
     if base_dir is not None:

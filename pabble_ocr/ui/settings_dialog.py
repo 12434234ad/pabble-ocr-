@@ -56,8 +56,11 @@ class SettingsDialog(QDialog):
         self.pdf_chunk_pages.setRange(1, 1000)
         self.pdf_chunk_pages.setValue(int(config.pdf_chunk_pages))
 
+        self.pdf_rerun_segments = QLineEdit((getattr(config, "pdf_rerun_segments", "") or "").strip())
+        self.pdf_rerun_segments.setPlaceholderText("示例：009（兼容输入 9，留空=关闭）")
+
         self.pdf_image_ocr_pages = QLineEdit((getattr(config, "pdf_image_ocr_pages", "") or "").strip())
-        self.pdf_image_ocr_pages.setPlaceholderText("示例：15,18-20（留空=关闭）")
+        self.pdf_image_ocr_pages.setPlaceholderText("示例：15,18-20；分卷文件可填绝对页码如 391-455（留空=关闭）")
 
         self.pdf_image_ocr_dpi = QSpinBox()
         self.pdf_image_ocr_dpi.setRange(72, 600)
@@ -187,6 +190,7 @@ class SettingsDialog(QDialog):
         form.addRow("TOKEN", self.token)
         form.addRow("OUTPUT_DIR", out_wrap)
         form.addRow("PDF_CHUNK_PAGES", self.pdf_chunk_pages)
+        form.addRow("PDF_RERUN_SEGMENTS（分段重打）", self.pdf_rerun_segments)
         form.addRow("PDF_IMAGE_OCR_PAGES（补漏：指定页重跑）", self.pdf_image_ocr_pages)
         form.addRow("PDF_IMAGE_OCR_DPI", self.pdf_image_ocr_dpi)
         form.addRow("PDF_IMAGE_OCR_MAX_SIDE_PX", self.pdf_image_ocr_max_side_px)
@@ -238,6 +242,7 @@ class SettingsDialog(QDialog):
             token=self.token.text().strip(),
             output_dir=self.output_dir.text().strip(),
             pdf_chunk_pages=int(self.pdf_chunk_pages.value()),
+            pdf_rerun_segments=self.pdf_rerun_segments.text().strip(),
             pdf_image_ocr_pages=self.pdf_image_ocr_pages.text().strip(),
             pdf_image_ocr_dpi=int(self.pdf_image_ocr_dpi.value()),
             pdf_image_ocr_max_side_px=int(self.pdf_image_ocr_max_side_px.value()),
